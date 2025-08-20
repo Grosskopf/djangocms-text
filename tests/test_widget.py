@@ -108,3 +108,13 @@ class WidgetTestCase(TestFixture, BaseTestCase):
         url = page.get_absolute_url(language)
         response = self.client.get(url)
         self.assertContains(response, "<span>some text</span>")
+
+
+@skipIf(not SKIP_CMS_TEST, "Skipping tests because djangocms is installed")
+class NonCMSWidgetTestCase(BaseTestCase):
+    def test_django_form_renders_widget(self):
+        from tests.test_app.forms import SimpleTextForm
+
+        form = SimpleTextForm()
+        rendered = form.render()
+        self.assertTrue(isinstance(rendered, str))
