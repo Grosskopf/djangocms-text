@@ -1,14 +1,18 @@
 from unittest import skipIf
-
-from cms.api import add_plugin
-
-from djangocms_text import html, settings
-from djangocms_text.utils import plugin_to_tag
-
-from .base import BaseTestCase
 from .fixtures import TestFixture
+from .base import BaseTestCase
+
+try:
+    from cms.api import add_plugin
+    from djangocms_text import html, settings
+    from djangocms_text.utils import plugin_to_tag
+
+    SKIP_CMS_TEST = False
+except ModuleNotFoundError:
+    SKIP_CMS_TEST = True
 
 
+@skipIf(SKIP_CMS_TEST, "Skipping tests because djangocms is not installed")
 class WidgetTestCase(TestFixture, BaseTestCase):
     def setUp(self):
         self.super_user = self._create_user("test", True, True)
